@@ -1,0 +1,104 @@
+package main
+
+import (
+	"fmt"
+	"strings"
+	"time"
+)
+
+type person1 struct {
+	name, eyes, hair string
+	glasses          bool
+}
+
+const (
+	vowels = "aeiouyw"
+)
+
+func main() {
+	checkbox := map[string]bool{
+		"Eyes":               false,
+		"Hair":               false,
+		"trueAmountOfVowels": false,
+	}
+
+	p1 := person1{name: "martha", eyes: "blue", hair: "brown", glasses: true}
+	p2 := person1{name: "felix", eyes: "green", hair: "blonde", glasses: false}
+	p3 := person1{name: "jack", eyes: "green", hair: "red", glasses: false}
+	p4 := person1{name: "todd", eyes: "green", hair: "brown", glasses: true}
+	p5 := person1{name: "william", eyes: "green", hair: "black", glasses: true}
+	p6 := person1{name: "matthew", eyes: "green", hair: "red", glasses: false}
+
+	crowd := []person1{p1, p2, p3, p4, p5, p6}
+
+	for _, potentialTarget := range crowd {
+
+		fmt.Printf("Potential Target %v is being searched\n", potentialTarget.name)
+		time.Sleep(time.Second * 2)
+
+		if potentialTarget.eyes == "green" {
+			checkbox["Eyes"] = true
+		} else {
+			PrintIsNotTarget(potentialTarget.name, checkbox)
+			continue
+		}
+
+		Con := consecutiveDoubleLetterChecker(potentialTarget.name)
+
+		if potentialTarget.hair == "red" && Con == true {
+			checkbox["Hair"] = true
+		} else if potentialTarget.hair == "red" && Con != true {
+			PrintIsNotTarget(potentialTarget.name, checkbox)
+			continue
+		} else if potentialTarget.hair != "red" {
+			checkbox["Hair"] = true
+		}
+
+		Vow := vowelCounter(potentialTarget.name)
+
+		if potentialTarget.glasses == true && Vow == 2 {
+			checkbox["trueAmountOfVowels"] = true
+
+		} else if potentialTarget.glasses == true && Vow != 2 {
+			PrintIsNotTarget(potentialTarget.name, checkbox)
+			continue
+
+		} else if potentialTarget.glasses == false && Vow == 3 {
+			checkbox["trueAmountOfVowels"] = true
+
+		} else if potentialTarget.glasses == false && Vow != 3 {
+			PrintIsNotTarget(potentialTarget.name, checkbox)
+			continue
+		}
+		fmt.Printf("%v Is the TARGET!", potentialTarget.name)
+	}
+
+}
+func PrintIsNotTarget(name string, checkbox map[string]bool) map[string]bool {
+	checkbox["Eyes"] = false
+	checkbox["Hair"] = false
+	checkbox["trueAmountOfVowels"] = false
+	fmt.Printf("%v Is not the Target\n\n", name)
+	time.Sleep(time.Second)
+	return checkbox
+}
+
+func consecutiveDoubleLetterChecker(name string) bool {
+	for i := 0; i < len(name)-1; i++ {
+		if name[i] == name[i+1] {
+			return true
+		}
+	}
+	return false
+}
+
+func vowelCounter(name string) int {
+	vowelCount := 0
+
+	for _, v := range name {
+		if strings.ContainsAny(string(v), vowels) {
+			vowelCount++
+		}
+	}
+	return vowelCount
+}
