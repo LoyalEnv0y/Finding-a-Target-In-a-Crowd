@@ -1,0 +1,101 @@
+package main
+
+import (
+	"fmt"
+	"strings"
+	"time"
+)
+
+// THE POINT of this program is to find the correct person in a crowd. To find him/her we already know some specific conditions and these are;
+// 1) the target has to have green eyes
+// 2) if he/she has red hair he/she needs to have consecutive same letters in his/her name (exp: todd, william, matthew) keep in mind that the person doesn't have to have red hair so if the hair isn't red we skip this one
+// 3) if the person has glasses he/she has to have exactly 2 vowels in his/her name, if he/she doesn't have glasses he/she has to have exactly 3 vowels in his/her name
+
+// we are creating the specifications of the people
+type person struct {
+	name, eyes, hair string
+	glasses          bool
+}
+
+// creating a constant to reference the vowels is important to check the 3rd condition
+const (
+	vowels = "aeiouyw"
+)
+
+func main() {
+	// we start with creating a checkbox
+	checkbox := map[string]bool{
+		"Eyes":               false,
+		"Hair":               false,
+		"trueAmountOfVowels": false,
+	}
+	// we are creating the people and grouping them all in a slice called crowd(line39)
+	p1 := person{name: "martha", eyes: "blue", hair: "brown", glasses: true}
+	p2 := person{name: "felix", eyes: "green", hair: "blonde", glasses: false}
+	p3 := person{name: "jack", eyes: "green", hair: "red", glasses: false}
+	p4 := person{name: "todd", eyes: "green", hair: "brown", glasses: true}
+	p5 := person{name: "william", eyes: "green", hair: "black", glasses: true}
+	p6 := person{name: "matthew", eyes: "green", hair: "red", glasses: false}
+
+	crowd := []person{p1, p2, p3, p4, p5, p6}
+
+	// we are making a loop so that we can range over all the people in crowd
+	for _, potentialTarget := range crowd {
+		Con := consecutiveDoubleLetterChecker(potentialTarget.name) //check line81
+		Vow := vowelCounter(potentialTarget.name)                   // check line91
+
+		fmt.Printf("Potential Target %v is being searched\n", potentialTarget.name)
+		time.Sleep(time.Second * 2)
+		// condition number1 is being checked and if true, Eyes key in checkbox will be changed to true
+		if potentialTarget.eyes == "green" {
+			checkbox["Eyes"] = true
+		}
+		// condition number2 is being checked and if true, Hair key in checkbox will be changed to true
+		if potentialTarget.hair == "red" && Con == true {
+			checkbox["Hair"] = true
+			// as I said, the target doesn't need to have red hair
+		} else if potentialTarget.hair != "red" {
+			checkbox["Hair"] = true
+		}
+		// condition number3 is being checked and if true, trueAmountOfVowels key in checkbox will be changed to true
+		if potentialTarget.glasses == true && Vow == 2 {
+			checkbox["trueAmountOfVowels"] = true
+		} else if potentialTarget.glasses == false && Vow == 3 {
+			checkbox["trueAmountOfVowels"] = true
+		}
+		// finally, we are checking if all the keys in the checkbox is true or not. This line will stop the code automatically and won't read below if true
+		if checkbox["Eyes"] == true && checkbox["Hair"] == true && checkbox["trueAmountOfVowels"] == true {
+			fmt.Printf("%v Is the TARGET!", potentialTarget.name)
+			return
+		}
+		// if the checkbox doesn't filled with trues, we will reset the checkbox keys to be false again
+		fmt.Printf("%v Is not the Target\n\n", potentialTarget.name)
+		checkbox["Eyes"] = false
+		checkbox["Hair"] = false
+		checkbox["trueAmountOfVowels"] = false
+		time.Sleep(time.Second)
+	}
+
+}
+
+// here we are checking if the person has a consecutive double letter or not
+func consecutiveDoubleLetterChecker(name string) bool {
+	for i := 0; i < len(name)-1; i++ {
+		if name[i] == name[i+1] {
+			return true
+		}
+	}
+	return false
+}
+
+// here we counting the amount of vowels the potential target has in their name
+func vowelCounter(name string) int {
+	vowelCount := 0
+
+	for _, v := range name {
+		if strings.ContainsAny(string(v), vowels) {
+			vowelCount++
+		}
+	}
+	return vowelCount
+}
