@@ -22,48 +22,41 @@ func main() {
 	p4 := person1{name: "todd", eyes: "green", hair: "brown", glasses: true}
 	p5 := person1{name: "william", eyes: "green", hair: "black", glasses: true}
 	p6 := person1{name: "matthew", eyes: "green", hair: "red", glasses: false}
-
 	crowd := []person1{p1, p2, p3, p4, p5, p6}
 
 	for _, potentialTarget := range crowd {
 
 		fmt.Printf("Potential Target %v is being searched\n", potentialTarget.name)
-		time.Sleep(time.Second * 2)
+		time.Sleep(time.Second)
 
 		if potentialTarget.eyes != "green" {
 			PrintIsNotTarget(potentialTarget.name)
 			continue
-		}
 
-		Con := consecutiveDoubleLetterChecker(potentialTarget.name)
-
-		if potentialTarget.hair == "red" && Con != true {
+		} else if potentialTarget.hair == "red" && consecutiveDoubleLetterChecker(potentialTarget.name) != true {
 			PrintIsNotTarget(potentialTarget.name)
 			continue
-		}
 
-		Vow := vowelCounter(potentialTarget.name)
-
-		if potentialTarget.glasses == true && Vow != 2 {
+		} else if potentialTarget.glasses == true && vowelCounter(potentialTarget.name) != 2 {
 			PrintIsNotTarget(potentialTarget.name)
 			continue
-		}
 
-		if potentialTarget.glasses == false && Vow != 3 {
+		} else if potentialTarget.glasses == false && vowelCounter(potentialTarget.name) != 3 {
 			PrintIsNotTarget(potentialTarget.name)
 			continue
+
+		} else {
+			fmt.Printf("%v Is the TARGET!", potentialTarget.name)
+			return
 		}
 
-		fmt.Printf("%v Is the TARGET!", potentialTarget.name)
-		return
 	}
 
 }
 func PrintIsNotTarget(name string) {
 	fmt.Printf("%v Is not the Target\n\n", name)
-	time.Sleep(time.Second)
+	time.Sleep(time.Second / 2)
 }
-
 func consecutiveDoubleLetterChecker(name string) bool {
 	for i := 0; i < len(name)-1; i++ {
 		if name[i] == name[i+1] {
@@ -72,7 +65,6 @@ func consecutiveDoubleLetterChecker(name string) bool {
 	}
 	return false
 }
-
 func vowelCounter(name string) int {
 	vowelCount := 0
 
