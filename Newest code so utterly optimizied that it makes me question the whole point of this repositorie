@@ -55,6 +55,7 @@ func main() {
 		}
 
 		fmt.Printf("%v Is the TARGET!", potentialTarget.name)
+		return
 	}
 
 }
