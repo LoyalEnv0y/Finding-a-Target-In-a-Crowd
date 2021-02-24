@@ -45,13 +45,10 @@ func main() {
 			PrintIsNotTarget(potentialTarget.name)
 			continue
 
-		} else {
-			fmt.Printf("%v Is the TARGET!", potentialTarget.name)
-			return
 		}
-
+		fmt.Printf("%v Is the TARGET!", potentialTarget.name)
+		return
 	}
-
 }
 func PrintIsNotTarget(name string) {
 	fmt.Printf("%v Is not the Target\n\n", name)
