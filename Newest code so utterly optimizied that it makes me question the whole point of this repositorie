@@ -32,23 +32,23 @@ func main() {
 		if potentialTarget.eyes != "green" {
 			PrintIsNotTarget(potentialTarget.name)
 			continue
-
-		} else if potentialTarget.hair == "red" && consecutiveDoubleLetterChecker(potentialTarget.name) != true {
+		}
+		if potentialTarget.hair == "red" && consecutiveDoubleLetterChecker(potentialTarget.name) != true {
 			PrintIsNotTarget(potentialTarget.name)
 			continue
-
-		} else if potentialTarget.glasses == true && vowelCounter(potentialTarget.name) != 2 {
+		}
+		if potentialTarget.glasses == true && vowelCounter(potentialTarget.name) != 2 {
 			PrintIsNotTarget(potentialTarget.name)
 			continue
-
-		} else if potentialTarget.glasses == false && vowelCounter(potentialTarget.name) != 3 {
+		}
+		if potentialTarget.glasses == false && vowelCounter(potentialTarget.name) != 3 {
 			PrintIsNotTarget(potentialTarget.name)
 			continue
-
 		}
 		fmt.Printf("%v Is the TARGET!", potentialTarget.name)
 		return
 	}
+	fmt.Println("The target is not in sight")
 }
 func PrintIsNotTarget(name string) {
 	fmt.Printf("%v Is not the Target\n\n", name)
